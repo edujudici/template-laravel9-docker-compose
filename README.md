@@ -6,7 +6,7 @@ Projeto utilizando docker com uma versão simples do laravel 8.x
 
 Utiliza-se as seguintes tecnologias para o funcionamento desse sistema:
 
-* [Laravel 8.x] - Framework PHP
+* [Laravel 9.x] - Framework PHP
 * [Docker] - Administrador de containers
 
 ### Pré-requisitos
@@ -21,7 +21,7 @@ Assume que atenda aos pré-requisitos informados acima para seguir com os passos
 Clonando o repositório
 
 ```sh
-$ git clone https://github.com/edujudici/template-laravel8-docker-compose.git
+$ git clone https://github.com/edujudici/template-laravel9-docker-compose.git
 ```
 
 Executar o shell script de instalação
@@ -69,5 +69,5 @@ MIT
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
 
-   [Laravel 8.x]: <https://laravel.com/docs/8.x>
+   [Laravel 9.x]: <https://laravel.com/docs/9.x>
    [Docker]: <https://www.docker.com/>
