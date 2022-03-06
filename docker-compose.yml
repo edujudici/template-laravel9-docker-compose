@@ -1,0 +1,72 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: ./docker/php
+      args:
+        USER: ${USER}
+        UID: ${UID}
+      dockerfile: Dockerfile
+    image: laravel-image
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+      - ./docker/php/supervisord.conf:/var/www/supervisord.conf
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    env_file: .env
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - 8000:80
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+        MYSQL_USER: ${DB_USERNAME}
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./docker/mysql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8001:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
